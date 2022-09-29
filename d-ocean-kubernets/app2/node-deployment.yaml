@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-deploy
+  namespace: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      appcom.docker.project: node-app-selector
+  template:
+    metadata:
+        labels:
+          appcom.docker.project: node-app-selector
+    spec:
+      containers:
+        - name: node-app-container
+          image: santiagoemmanuel/gsantiago.dev:v1
+          imagePullPolicy: Always
+          resources:
+            requests: 
+              memory: "256Mi"
+              cpu: "800m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          env:
+          - name: PMA_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: php-app-configmap
+                key: PMA_HOST           
+          ports:
+            - containerPort: 3000
+              protocol: TCP

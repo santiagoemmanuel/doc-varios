@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql-app-svc-dbmysql
+  namespace: app
+spec:
+  selector:
+    app: mysql-app-selector
+  ports:
+  - protocol: TCP
+    name: mysql-app-selector
+    port: 3306
+    targetPort: 3306

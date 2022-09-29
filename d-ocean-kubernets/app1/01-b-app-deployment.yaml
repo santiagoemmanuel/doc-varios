@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app
+  template:
+    metadata:
+        labels:
+          app: app
+    spec:
+      containers:
+        - name: phpmyadmin-app-container
+          image: phpmyadmin/phpmyadmin
+          imagePullPolicy: Always
+          resources:
+            requests: 
+              memory: "256Mi"
+              cpu: "800m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          env:
+          - name: PMA_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: php-app-configmap
+                key: PMA_HOST           
+          ports:
+            - containerPort: 80
+              protocol: TCP
